@@ -14,6 +14,8 @@
 		E842FE2222093038005F6BE0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E842FE2122093038005F6BE0 /* Assets.xcassets */; };
 		E842FE2522093038005F6BE0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E842FE2322093038005F6BE0 /* LaunchScreen.storyboard */; };
 		E842FE2D22093067005F6BE0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E842FE2C22093067005F6BE0 /* GoogleService-Info.plist */; };
+		E8507314221D726300EC2A1D /* HouseListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8507313221D726300EC2A1D /* HouseListTableViewController.swift */; };
+		E8507316221D728500EC2A1D /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8507315221D728500EC2A1D /* House.swift */; };
 		E85CF724220932BD00B1F4C1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85CF723220932BD00B1F4C1 /* LoginViewController.swift */; };
 		E85CF727220A5B1E00B1F4C1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85CF726220A5B1E00B1F4C1 /* HomeViewController.swift */; };
 		E85CF729220A6B9B00B1F4C1 /* ShoppingListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85CF728220A6B9B00B1F4C1 /* ShoppingListsTableViewController.swift */; };
@@ -38,6 +40,8 @@
 		E842FE2422093038005F6BE0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E842FE2622093038005F6BE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E842FE2C22093067005F6BE0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E8507313221D726300EC2A1D /* HouseListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseListTableViewController.swift; sourceTree = "<group>"; };
+		E8507315221D728500EC2A1D /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
 		E85CF723220932BD00B1F4C1 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E85CF7252209361100B1F4C1 /* My Kitchen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Kitchen.entitlements"; sourceTree = "<group>"; };
 		E85CF726220A5B1E00B1F4C1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -101,6 +105,7 @@
 		E842FE1922093037005F6BE0 /* My Kitchen */ = {
 			isa = PBXGroup;
 			children = (
+				E8507312221D724A00EC2A1D /* HouseLists */,
 				E8C8E4812213C52C00EA7A25 /* myLists */,
 				E8C8E4802213C51500EA7A25 /* Settings */,
 				E8C8E477220BD09100EA7A25 /* RecipeFiles */,
@@ -117,12 +122,20 @@
 			path = "My Kitchen";
 			sourceTree = "<group>";
 		};
+		E8507312221D724A00EC2A1D /* HouseLists */ = {
+			isa = PBXGroup;
+			children = (
+				E8507313221D726300EC2A1D /* HouseListTableViewController.swift */,
+				E8507315221D728500EC2A1D /* House.swift */,
+			);
+			path = HouseLists;
+			sourceTree = "<group>";
+		};
 		E8C8E477220BD09100EA7A25 /* RecipeFiles */ = {
 			isa = PBXGroup;
 			children = (
 				E8C8E478220BD0C000EA7A25 /* RecipeTableViewController.swift */,
 				E8C8E47A220BD27100EA7A25 /* Recipe.swift */,
-				E8C8E4822215112A00EA7A25 /* User.swift */,
 				E8C8E47C220BD3BB00EA7A25 /* RecipeViewTableViewController.swift */,
 			);
 			path = RecipeFiles;
@@ -131,6 +144,7 @@
 		E8C8E4802213C51500EA7A25 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				E8C8E4822215112A00EA7A25 /* User.swift */,
 				E8C8E47E2213C51000EA7A25 /* SettingsTableViewController.swift */,
 				E839AF01221D26F7003F2F31 /* FriendRequestsViewController.swift */,
 			);
@@ -279,11 +293,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E8507316221D728500EC2A1D /* House.swift in Sources */,
 				E85CF724220932BD00B1F4C1 /* LoginViewController.swift in Sources */,
 				E842FE1B22093037005F6BE0 /* AppDelegate.swift in Sources */,
 				E85CF72B220A9F9700B1F4C1 /* GroceryListTableViewController.swift in Sources */,
 				E85CF727220A5B1E00B1F4C1 /* HomeViewController.swift in Sources */,
 				E839AF02221D26F7003F2F31 /* FriendRequestsViewController.swift in Sources */,
+				E8507314221D726300EC2A1D /* HouseListTableViewController.swift in Sources */,
 				E8C8E479220BD0C000EA7A25 /* RecipeTableViewController.swift in Sources */,
 				E85CF72D220B189800B1F4C1 /* GroceryItem.swift in Sources */,
 				E8C8E47F2213C51000EA7A25 /* SettingsTableViewController.swift in Sources */,

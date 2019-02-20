@@ -87,8 +87,6 @@ class FriendRequestsViewController: UIViewController, UITableViewDataSource, UIT
             let nRequest = request.replacingOccurrences(of: ".", with: ";")
             self.ref.child("Email-UID").child(nRequest).observeSingleEvent(of: .value) {
                 (snapshot) in
-                print(snapshot as Any)
-                print(snapshot.value)
                 
                 guard let fUID = snapshot.value as? String else {
                     return
@@ -102,9 +100,7 @@ class FriendRequestsViewController: UIViewController, UITableViewDataSource, UIT
                         friendEntry.numPending -= 1
                         friendEntry.pendingRequests.removeAll { $0 == "\(self.curUser.email)" }
                         
-                        
-                        
-                        //add roomate
+                        //add roomate to roomates
                         friendEntry.numRoomates += 1
                         friendEntry.roomates.append(self.curUser.email)
                         

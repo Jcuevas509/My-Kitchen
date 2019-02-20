@@ -27,10 +27,7 @@ struct GroceryItem{
     }
     
     init?(snapshot: DataSnapshot) {
-        //print(snapshot.key)
-        //print(snapshot.value!)
-
-        //print(valu!["friendRequests"]!)
+        
         guard
             let value = snapshot.value as? [String: AnyObject],
             let name = value["name"] as? String,
