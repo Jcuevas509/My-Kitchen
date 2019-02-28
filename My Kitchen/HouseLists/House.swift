@@ -16,19 +16,21 @@ struct HouseEntry{
     let key: String
     let houseID: String
     var numMembers: Int
+    var numLists: Int
     var members: [String]
-    var numItems: Int
-    var Items: [String]
-    
+    var listNames: [String]
+    var listIDs: [String]
     
     init(houseID: String, key: String = "") {
         self.ref = nil
         self.key = key
         self.houseID = houseID
+        self.numLists = 0
         self.numMembers = 0
-        self.numItems = 0
         self.members = [String]()
-        self.Items = [String]()
+        self.listNames = [String]()
+        self.listIDs = [String]()
+        
     }
     
   
@@ -41,28 +43,32 @@ struct HouseEntry{
         guard
             let value = snapshot.value as? [String: AnyObject],
             let houseID = value["houseID"] as? String,
-            let numMembers = value["numMembers"] as? Int,
-            let numItems = value["numItems"] as? Int else{
+            let numLists = value["numLists"] as? Int,
+            let numMembers = value["numMembers"] as? Int else{
                 return nil
         }
         self.ref = snapshot.ref
         self.key = snapshot.key
         self.houseID = houseID
         self.numMembers = numMembers
-        self.numItems = numItems
         self.members = [String]()
-        self.Items = [String]()
-        if numItems > 0 {
-            if let items = value["Items"] as? [String]{
-                self.Items = items
-            }
-            
-        }
+        self.listNames = [String]()
+        self.listIDs = [String]()
+        self.numLists = numLists
         if numMembers > 0 {
             if let members = value["Members"] as? [String]{
                 self.members = members
             }
-            
+        }
+        if numLists > 0 {
+            if let listNames = value["ListNames"] as? [String]{
+                self.listNames = listNames
+                
+            }
+            if let listIds = value["ListIDs"] as? [String]{
+                self.listIDs = listIds
+                
+            }
         }
         
     }
@@ -71,9 +77,10 @@ struct HouseEntry{
         return [
             "houseID": houseID,
             "numMembers": numMembers,
-            "numItems": numItems,
             "Members": members,
-            "Items": Items
+            "numLists": numLists,
+            "ListNames": listNames,
+            "ListIDs": listIDs
         ]
     }
     

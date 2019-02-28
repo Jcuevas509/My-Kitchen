@@ -118,7 +118,7 @@ class ShoppingListsTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ListCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ListCelll", for: indexPath)
 
         // Configure the cell...
         cell.textLabel?.text = ListNames[indexPath.row]

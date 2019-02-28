@@ -16,6 +16,8 @@
 		E842FE2D22093067005F6BE0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E842FE2C22093067005F6BE0 /* GoogleService-Info.plist */; };
 		E8507314221D726300EC2A1D /* HouseListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8507313221D726300EC2A1D /* HouseListTableViewController.swift */; };
 		E8507316221D728500EC2A1D /* House.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8507315221D728500EC2A1D /* House.swift */; };
+		E85073182227A52F00EC2A1D /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85073172227A52F00EC2A1D /* List.swift */; };
+		E850731A2227A80900EC2A1D /* ListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85073192227A80900EC2A1D /* ListTableViewController.swift */; };
 		E85CF724220932BD00B1F4C1 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85CF723220932BD00B1F4C1 /* LoginViewController.swift */; };
 		E85CF727220A5B1E00B1F4C1 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85CF726220A5B1E00B1F4C1 /* HomeViewController.swift */; };
 		E85CF729220A6B9B00B1F4C1 /* ShoppingListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E85CF728220A6B9B00B1F4C1 /* ShoppingListsTableViewController.swift */; };
@@ -42,6 +44,8 @@
 		E842FE2C22093067005F6BE0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		E8507313221D726300EC2A1D /* HouseListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseListTableViewController.swift; sourceTree = "<group>"; };
 		E8507315221D728500EC2A1D /* House.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = House.swift; sourceTree = "<group>"; };
+		E85073172227A52F00EC2A1D /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		E85073192227A80900EC2A1D /* ListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewController.swift; sourceTree = "<group>"; };
 		E85CF723220932BD00B1F4C1 /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		E85CF7252209361100B1F4C1 /* My Kitchen.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "My Kitchen.entitlements"; sourceTree = "<group>"; };
 		E85CF726220A5B1E00B1F4C1 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -127,6 +131,8 @@
 			children = (
 				E8507313221D726300EC2A1D /* HouseListTableViewController.swift */,
 				E8507315221D728500EC2A1D /* House.swift */,
+				E85073172227A52F00EC2A1D /* List.swift */,
+				E85073192227A80900EC2A1D /* ListTableViewController.swift */,
 			);
 			path = HouseLists;
 			sourceTree = "<group>";
@@ -301,8 +307,10 @@
 				E839AF02221D26F7003F2F31 /* FriendRequestsViewController.swift in Sources */,
 				E8507314221D726300EC2A1D /* HouseListTableViewController.swift in Sources */,
 				E8C8E479220BD0C000EA7A25 /* RecipeTableViewController.swift in Sources */,
+				E85073182227A52F00EC2A1D /* List.swift in Sources */,
 				E85CF72D220B189800B1F4C1 /* GroceryItem.swift in Sources */,
 				E8C8E47F2213C51000EA7A25 /* SettingsTableViewController.swift in Sources */,
+				E850731A2227A80900EC2A1D /* ListTableViewController.swift in Sources */,
 				E85CF729220A6B9B00B1F4C1 /* ShoppingListsTableViewController.swift in Sources */,
 				E8C8E47B220BD27100EA7A25 /* Recipe.swift in Sources */,
 				E8C8E47D220BD3BB00EA7A25 /* RecipeViewTableViewController.swift in Sources */,

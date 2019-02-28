@@ -5,6 +5,8 @@
 //  Created by Jose Cuevas on 2/19/19.
 //  Copyright © 2019 Jose Cuevas. All rights reserved.
 //
+///Must ADD Roomates
+
 
 import UIKit
 import Firebase
@@ -63,7 +65,7 @@ class FriendRequestsViewController: UIViewController, UITableViewDataSource, UIT
         //selectedAutoID = AutoIDs[RecipeName]!
         
         //performSegue(withIdentifier: "toRecipeView", sender: nil)
-        let alert = UIAlertController(title: "Friend Request", message: "Do you wish to add this friend?", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Friend Request", message: "Do you wish to add \(self.curUser.friendRequests[indexPath.row])", preferredStyle: .alert)
         
         let AddAction = UIAlertAction(title: "Add", style: UIAlertAction.Style.default, handler: {
             (_)in
@@ -73,7 +75,21 @@ class FriendRequestsViewController: UIViewController, UITableViewDataSource, UIT
             print("request from : \(request)")
             self.curUser.friendRequests.remove(at: indexPath.row)
             print(self.curUser.friendRequests as Any)
-            
+            var houseKey: String
+            if self.curUser.numRoomates == 0{
+                //generate house ID
+                
+                houseKey = self.ref.child("Houses").child("House-Info").childByAutoId().key!
+                var nHouse: HouseEntry = HouseEntry.init(houseID: houseKey)
+                nHouse.members.append(self.curUser.email)
+                nHouse.members.append(request)
+                nHouse.numMembers = 2
+                self.ref.child("Houses").child("House-Info").child(houseKey).setValue(nHouse.toAnyObject())
+                print(houseKey)
+                self.curUser.houseKey = houseKey
+            } else{
+                houseKey = self.curUser.houseKey
+            }
            
             //add friend to cur User
             self.curUser.roomates.append(request)
@@ -104,6 +120,8 @@ class FriendRequestsViewController: UIViewController, UITableViewDataSource, UIT
                         friendEntry.numRoomates += 1
                         friendEntry.roomates.append(self.curUser.email)
                         
+                        //addHouseKey
+                        friendEntry.houseKey = houseKey
                         //write this data back to databse
                         self.ref.child("users").child(fUID).setValue(friendEntry.toAnyObject())
                         

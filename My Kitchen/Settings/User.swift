@@ -15,6 +15,7 @@ struct UserEntry{
     let ref: DatabaseReference?
     let key: String
     let email: String
+    var houseKey: String
     var numRoomates: Int
     var numPending: Int
     var numRequests: Int
@@ -33,6 +34,7 @@ struct UserEntry{
         self.friendRequests = [String]()
         self.roomates = [String]()
         self.pendingRequests = [String]()
+        self.houseKey = String()
     }
     
    /* init?(snapshot: DataSnapshot) {
@@ -78,6 +80,7 @@ struct UserEntry{
         guard
             let value = snapshot.value as? [String: AnyObject],
             let email = value["email"] as? String,
+            let houseKey = value["houseKey"] as? String,
             let numRoomates = value["numRoomates"] as? Int,
             let numPending = value["numPending"] as? Int,
             let numRequests = value["numRequests"] as? Int else{
@@ -89,6 +92,7 @@ struct UserEntry{
         self.numPending = numPending
         self.numRequests = numRequests
         self.numRoomates = numRoomates
+        self.houseKey = houseKey
         self.pendingRequests = [String]()
         self.friendRequests = [String]()
         self.roomates = [String]()
@@ -125,7 +129,8 @@ struct UserEntry{
             "numPending": numPending,
             "roomates": roomates,
             "friendRequests": friendRequests,
-            "pendingRequests": pendingRequests
+            "pendingRequests": pendingRequests,
+            "houseKey": houseKey
         ]
     }
     
