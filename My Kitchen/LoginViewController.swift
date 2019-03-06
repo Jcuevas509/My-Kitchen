@@ -89,6 +89,11 @@ class LoginViewController: UIViewController {
                         let nEmail = emailField.text!.replacingOccurrences(of: ".", with: ";")
                         
                         ref.child("Email-UID").child(nEmail).setValue(currentUser?.uid)
+                        
+                        let nUser: UserLists = UserLists.init(userID: (currentUser?.uid)!, email: (currentUser?.email)!)
+                        ref.child("User-Lists").child((currentUser?.uid)!).child("User-S-Info").setValue(nUser.toAnyObject())
+                        let nRUser: UserLists = UserLists.init(userID: (currentUser?.uid)!, email: (currentUser?.email)!)
+                        ref.child("User-Lists").child((currentUser?.uid)!).child("User-R-Info").setValue(nRUser.toAnyObject())
                     }
                     self.performSegue(withIdentifier: "toHome", sender: nil)
                     

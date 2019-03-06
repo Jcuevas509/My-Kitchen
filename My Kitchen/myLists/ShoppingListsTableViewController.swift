@@ -13,11 +13,11 @@ class ShoppingListsTableViewController: UITableViewController {
     var ref: DatabaseReference!
     var currentUser: User? = Auth.auth().currentUser
     var handle: AuthStateDidChangeListenerHandle!
-    var ListNames: [String] = ([])
-    var selectedCell:Int = 0
-    var CellName:String = ""
-    var selectedAutoID:String = ""
-    var AutoIDsD: [String: String] = ([:])
+    
+ 
+    var selectedAutoId:String = ""
+    var UserList: UserLists!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -28,13 +28,8 @@ class ShoppingListsTableViewController: UITableViewController {
         //set Database reference
          ref = Database.database().reference()
         
-        fetchNewAdds()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        LoadUserInfo()
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
@@ -46,16 +41,19 @@ class ShoppingListsTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return ListNames.count
+        if UserList == nil{
+            return 0
+        }
+        return UserList.numLists
     }
 
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath){
         // Return false if you do not want the specified item to be editable.
-        CellName = ListNames[indexPath.row]
-        selectedAutoID = AutoIDsD[CellName]!
         
-        performSegue(withIdentifier: "toListView", sender: nil)
+        selectedAutoId = UserList.listIDs[indexPath.row]
+        
+        performSegue(withIdentifier: "toShoppingList", sender: nil)
     }
     
     
@@ -64,14 +62,17 @@ class ShoppingListsTableViewController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         
-        if (segue.identifier == "toListView"){
+        if (segue.identifier == "toShoppingList"){
             //print(ListNames[selectedCell])
             //This way since im going into a NavigationControllor
             let DestViewController = segue.destination as! UINavigationController
-            let targetController = DestViewController.topViewController as! GroceryListTableViewController
-            targetController.listName = CellName
-            targetController.autoID = selectedAutoID
-           
+            let targetController = DestViewController.topViewController as! ListTableViewController
+            targetController.autoID = selectedAutoId
+            targetController.dir = self.UserList.userID
+            targetController.listRef = self.ref.child("User-Lists").child(self.UserList.userID).child("Shopping-Lists").child(selectedAutoId)
+            targetController.autoID = selectedAutoId
+            targetController.navigationItem.prompt = "My Shopping Lists"
+            targetController.type = 1
         
         }
     }
@@ -81,25 +82,29 @@ class ShoppingListsTableViewController: UITableViewController {
                                       preferredStyle: .alert)
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
             
-            let nameField = alert.textFields![0]
-            self.CellName = nameField.text!
+            let namefield = alert.textFields![0]
+            guard let nameField = namefield.text else{
+                return
+            }
+            if nameField == ""{
+                return
+            }
             //Save to Database
-            //Save to List-Names
-            self.ref = self.ref.child("user-lists").child(self.currentUser!.uid).child("List-Names").childByAutoId()
-            let autoID = self.ref.key
+            guard let autoID = self.ref.child("User-Lists").child(self.UserList.userID).child("Shopping-Lists").childByAutoId().key else{
+                return
+            }
             
-            self.selectedAutoID = autoID!
-            self.ref.setValue(nameField.text)
+            self.selectedAutoId = autoID
+            let newList: List = List.init(name: nameField, autoID: autoID)
+            self.ref.child("User-Lists").child(self.UserList.userID).child("Shopping-Lists").child(autoID).setValue(newList.toAnyObject())
             
+            self.UserList.listNames.append(nameField)
+            self.UserList.listIDs.append(autoID)
             
-            //bring back reference pointer
-            self.ref = Database.database().reference()
-           //Save to Shopping-Lists
-            let data: GroceryItem = GroceryItem.init(name: self.CellName, numItems: 0, Items: [:])
-            
-            self.ref.child("user-lists").child(self.currentUser!.uid).child("Shopping-Lists").child(autoID!).child(autoID!).setValue(data.toAnyObject())
+            self.UserList.numLists += 1
+            self.ref.child("User-Lists").child(self.UserList.userID).child("User-S-Info").setValue(self.UserList.toAnyObject())
 
-            self.performSegue(withIdentifier: "toListView", sender: nil)
+            self.performSegue(withIdentifier: "toShoppingList", sender: nil)
         }
         
         let cancelAction = UIAlertAction(title: "Cancel",
@@ -109,8 +114,7 @@ class ShoppingListsTableViewController: UITableViewController {
             textName.placeholder = "Enter list name"
         }
         
-       
-        
+
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         
@@ -121,8 +125,7 @@ class ShoppingListsTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListCelll", for: indexPath)
 
         // Configure the cell...
-        cell.textLabel?.text = ListNames[indexPath.row]
-        //cell.textLabel?.text = quizData[indexPath.row]
+        cell.textLabel?.text = self.UserList.listNames[indexPath.row]
         
         return cell
     }
@@ -138,67 +141,44 @@ class ShoppingListsTableViewController: UITableViewController {
     }
     
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     @IBAction func unwindFromDone(sender: UIStoryboardSegue) {
         /*if let sourceViewController = sender.source as? GroceryListTableViewController {
         
                 //let dataBack = sourceViewController.listName
         }*/
     }
-    @IBAction func unwindTFromDelete(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.source as? GroceryListTableViewController {
-            let dataBack = sourceViewController.listName
-            if let index = self.ListNames.index(of: dataBack) {
-                self.ListNames.remove(at: index)
+    @IBAction func unwindFromShoppingDelete(sender: UIStoryboardSegue) {
+        if let sourceViewController = sender.source as? ListTableViewController {
+            let listName = sourceViewController.list.name
+            let listID = sourceViewController.autoID
+            //list num
+            self.UserList.numLists -= 1
+            //listIDs
+            if let IdIndex = self.UserList.listIDs.index(of: listID) {
+                self.UserList.listIDs.remove(at: IdIndex)
             }
+            //list names
+            if let NameIndex = self.UserList.listNames.index(of: listName) {
+                self.UserList.listNames.remove(at: NameIndex)
+            }
+            
+            //post house
+            self.ref.child("User-Lists").child(UserList.userID).child("User-S-Info").setValue(self.UserList.toAnyObject())
             self.tableView.reloadData()
             
             
         }
     }
-    func fetchNewAdds(){
-        ref.child("user-lists").child((self.currentUser?.uid)!).child("List-Names").observe(.childAdded, with: { (snapshot) -> Void in
+
+    func LoadUserInfo(){
+        //Load Items
         
-            
-            let content = snapshot.value as? (String)
-            if let actualContent = content {
-                self.ListNames.append(actualContent)
-                self.AutoIDsD[actualContent] = snapshot.key
+        
+        ref.child("User-Lists").child((self.currentUser?.uid)!).child("User-S-Info").observe(.value, with: { (snapshot) -> Void in
+            print(snapshot as Any)
+            if let actualContent = UserLists(snapshot: snapshot) {
+                self.UserList = actualContent
                 self.tableView.reloadData()
             }
             

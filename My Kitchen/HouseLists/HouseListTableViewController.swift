@@ -11,12 +11,13 @@ import Firebase
 
 class HouseListTableViewController: UITableViewController {
 
+    @IBOutlet weak var AddButton: UIBarButtonItem!
     var House: HouseEntry!
     var ref: DatabaseReference!
     var currentUser: User? = Auth.auth().currentUser
     var handle: AuthStateDidChangeListenerHandle!
+    
     var curUserEntry : UserEntry!
-    var listNames: [String]!
     var selectedAutoId: String = String()
     
     override func viewDidLoad() {
@@ -47,21 +48,20 @@ class HouseListTableViewController: UITableViewController {
         
     }
     func LoadHouse(){
-        //Load Items
-        let dir = self.curUserEntry.houseKey
+     //Load Items
         
-        
-        ref.child("Houses").child("House-Info").child(dir).observeSingleEvent(of: .value) {
-            (snapshot) in
+     let dir = self.curUserEntry.houseKey
+
+        ref.child("Houses").child(dir).child("House-Info").observe(.value, with: { (snapshot) -> Void in
             print(snapshot as Any)
             if let actualContent = HouseEntry(snapshot: snapshot) {
-                self.House = actualContent
-                self.tableView.reloadData()
-                print("Got House")
+                 self.House = actualContent
+                 self.tableView.reloadData()
             }
-            
-        }
+     
+        })
     }
+
     func LoadUser(){
         //Load Items
         let dir = self.currentUser?.uid
@@ -69,6 +69,9 @@ class HouseListTableViewController: UITableViewController {
             (snapshot) in
             if let actualContent = UserEntry(snapshot: snapshot) {
                 self.curUserEntry = actualContent
+                if self.curUserEntry.houseKey == ""{
+                    return
+                }
                 self.LoadHouse()
             }
             
@@ -76,16 +79,16 @@ class HouseListTableViewController: UITableViewController {
     }
 
     @IBAction func AddPressed(_ sender: Any) {
+        if self.curUserEntry.houseKey == ""{
+            self.LoadUser()
+            return
+        }
         let alert = UIAlertController(title: "Create new list",
                                       message: "Enter list name",
                                       preferredStyle: .alert)
         let saveAction = UIAlertAction(title: "Save", style: .default) { _ in
             
-            /*guard let nameField = alert.textFields![0] else {
-                //show("No address to submit")
-                print("Invalid input")
-                return
-            }*/
+          
             let namefield = alert.textFields![0]
             guard let nameField = namefield.text else{
                 return
@@ -94,19 +97,19 @@ class HouseListTableViewController: UITableViewController {
                 return
             }
             //Save to Database
-            guard let autoID = self.ref.child("Houses").child("House-Lists").childByAutoId().key else{
+            guard let autoID = self.ref.child("Houses").child(self.House.houseID).child("House-Lists").childByAutoId().key else{
                 return
             }
             
             self.selectedAutoId = autoID
             let newList: List = List.init(name: nameField, autoID: autoID)
-            self.ref.child("Houses").child("House-Lists").child(autoID).setValue(newList.toAnyObject())
+            self.ref.child("Houses").child(self.House.houseID).child("House-Lists").child(autoID).setValue(newList.toAnyObject())
             
             self.House.listNames.append(nameField)
             self.House.listIDs.append(autoID)
             
             self.House.numLists += 1
-            self.ref.child("Houses").child("House-Info").child(self.House.houseID).setValue(self.House.toAnyObject())
+            self.ref.child("Houses").child(self.House.houseID).child("House-Info").setValue(self.House.toAnyObject())
           
             self.performSegue(withIdentifier: "toHouseList", sender: nil)
         }
@@ -117,9 +120,7 @@ class HouseListTableViewController: UITableViewController {
         alert.addTextField { textName in
             textName.placeholder = "Enter list name"
         }
-        
-        
-        
+
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         
@@ -129,9 +130,6 @@ class HouseListTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HouseCell", for: indexPath)
 
-        // Configure the cell...
-
-        print(indexPath.row)
         cell.textLabel?.text = self.House.listNames[indexPath.row]
         return cell
     }
@@ -151,50 +149,31 @@ class HouseListTableViewController: UITableViewController {
          //let dataBack = sourceViewController.listName
          }*/
     }
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+    @IBAction func unwindFromHouseDelete(sender: UIStoryboardSegue) {
+        if let sourceViewController = sender.source as? ListTableViewController {
+            let listName = sourceViewController.list.name
+            let listID = sourceViewController.autoID
+            //list num
+            self.House.numLists -= 1
+            //listIDs
+            if let IdIndex = self.House.listIDs.index(of: listID) {
+               self.House.listIDs.remove(at: IdIndex)
+            }
+            //list names
+            if let NameIndex = self.House.listNames.index(of: listName) {
+                self.House.listNames.remove(at: NameIndex)
+            }
+            
+            //post house
+            self.ref.child("Houses").child(House.houseID).child("House-Info").setValue(self.House.toAnyObject())
+            self.tableView.reloadData()
+            
+            
+        }
     }
-    */
 
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
 
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
 
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -208,7 +187,9 @@ class HouseListTableViewController: UITableViewController {
             let targetController = DestViewController.topViewController as! ListTableViewController
             targetController.curUserEntry = self.curUserEntry
             targetController.autoID = selectedAutoId
-            
+            targetController.dir = self.curUserEntry.houseKey
+            targetController.listRef = self.ref.child("Houses").child(self.curUserEntry.houseKey).child("House-Lists").child(selectedAutoId)
+            targetController.type = 0
         }
     }
 }

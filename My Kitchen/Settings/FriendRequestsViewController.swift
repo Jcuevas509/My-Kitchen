@@ -79,12 +79,12 @@ class FriendRequestsViewController: UIViewController, UITableViewDataSource, UIT
             if self.curUser.numRoomates == 0{
                 //generate house ID
                 
-                houseKey = self.ref.child("Houses").child("House-Info").childByAutoId().key!
+                houseKey = self.ref.child("Houses").childByAutoId().key!
                 var nHouse: HouseEntry = HouseEntry.init(houseID: houseKey)
                 nHouse.members.append(self.curUser.email)
                 nHouse.members.append(request)
                 nHouse.numMembers = 2
-                self.ref.child("Houses").child("House-Info").child(houseKey).setValue(nHouse.toAnyObject())
+                self.ref.child("Houses").child(houseKey).child("House-Info").setValue(nHouse.toAnyObject())
                 print(houseKey)
                 self.curUser.houseKey = houseKey
             } else{
